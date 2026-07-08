@@ -1,0 +1,33 @@
+import type { DataType } from "./common";
+
+export interface PersonProperties {
+  birth_year: string;
+  eye_color: string;
+  films: string[];
+  gender: string;
+  hair_color: string;
+  height: string;
+  homeworld: string;
+  mass: string;
+  name: string;
+  skin_color: string;
+  created: string;
+  edited: string;
+  species: string[];
+  starships: string[];
+  url: string;
+  vehicles: string[];
+}
+
+export interface PersonDetailsType {
+  name: string;
+  birth_year: string;
+  gender: string;
+  eye_color: string;
+  hair_color: string;
+  height: string;
+  mass: string;
+  films: string[];
+}
+
+export type PeopleType = DataType<PersonProperties>;
