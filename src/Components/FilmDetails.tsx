@@ -1,59 +1,22 @@
-import { useEffect, useState } from "react";
 import type { FilmDetailsType } from "../schemas/films";
+import { useGetItems } from "../hooks/swapi";
 
-const emptyDetails = {
-  title: "",
-  opening_crawl: "",
-  characters: [""],
-};
-
-interface Character {
-  name: string;
-  url: string;
-}
-
-export const FilmDetails = ({
-  details = emptyDetails,
-}: {
-  details?: FilmDetailsType;
-}) => {
-  const [characters, setCharacters] = useState<Character[]>();
-
-  useEffect(() => {
-    async function getCharacters() {
-      try {
-        const charactersData = await Promise.all(
-          details.characters.map(async (url) => {
-            const response = await fetch(url);
-            return response.json();
-          }),
-        );
-
-        setCharacters(
-          charactersData.map((character) => {
-            return {
-              name: character.result.properties.name,
-              url: character.result.properties.url,
-            };
-          }),
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getCharacters();
-  }, [details.characters]);
+export const FilmDetails = ({ data }: { data: FilmDetailsType }) => {
+  const { data: movieCharacters = [] } = useGetItems(
+    (data?.characters ?? []).map((url: string) => url.split("/api/")[1]),
+  );
 
   return (
-    <>
-      <p>{details.title}</p>
+    <div>
+      <p>{data.title}</p>
       <p>Opening Crawl</p>
-      <p>{details.opening_crawl}</p>
+      <p>{data.opening_crawl}</p>
       <p>Characters</p>
-      {characters?.map((item) => (
-        <p>{item.name}</p>
+      {movieCharacters?.map((item, index) => (
+        <div key={index}>
+          <p>{item.name}</p>
+        </div>
       ))}
-    </>
+    </div>
   );
 };
